@@ -1,5 +1,6 @@
 const Firm = require("../models/Firm");
 const Vendor = require("../models/Vendor");
+const Path = require("path");
 const multer = require("multer");
 
 // Multer Storage
@@ -59,17 +60,25 @@ const addFirm = async (req, res) => {
     }
 };
 
-const deleteFirmById=async(req,res)=>{
-    try{
-        const firmId=req.params.firmId
-        const deletedProduct=await Firm.findByIdAndDelete(firmId)
-        if(!deletedProduct){
-            return res.status(404).json({error:"No product found"})
+const deleteFirmById = async (req, res) => {
+    try {
+        const firmId = req.params.firmId;
+        const deletedFirm = await Firm.findByIdAndDelete(firmId);
+
+        if (!deletedFirm) {
+            return res.status(404).json({ error: "No firm found" });
         }
-    }catch(error){
-        console.log(error)
-        res.status(500).json({error:"internal server error"})
+
+        return res.status(200).json({ message: "Firm deleted successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "internal server error" });
     }
-}
+};
+
 // Export with multer
-module.exports = { addFirm: [upload.single("image"), addFirm],deleteFirmById };
+module.exports = { 
+    addFirm: [upload.single("image"), addFirm], 
+    deleteFirmById 
+};
